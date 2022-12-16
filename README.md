@@ -1,1 +1,172 @@
 # GPT-LineBot-js-vercel
+
+## 常見問題
+
+- 遇到「403 Forbidden」的問題，請檢查 LINE 的環境變數是否設置正確。
+- 遇到「404 Not Found」的問題，請檢查 LINE 的「Webhook URL」是否設置正確。
+- 遇到「429 Too Many Requests」的問題，請檢查 OpenAI 的使用額度。
+
+## 指令
+
+可以在 LINE 手機應用程式輸入以下指令，來變更程式設定。
+
+| 名稱                  | 說明                                               |
+| --------------------- | -------------------------------------------------- |
+| `version`             | 取得版本資訊                                       |
+| `ai <text>`           | 詢問 AI 問題                                       |
+| `ai --auto-reply off` | 關閉 AI 自動回覆，須設置 `VERCEL_API_KEY` 環境變數 |
+| `ai --auto-reply on`  | 開啟 AI 自動回覆，須設置 `VERCEL_API_KEY` 環境變數 |
+
+## 環境變數
+
+可以在 Vercel 平台設置以下環境變數，來變更程式設定。
+
+| 名稱                                  | 預設值             | 說明                                                                                                                              |
+| ------------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `APP_DEBUG`                           | `false`            | 決定是否印出訊息，可設置為 `true` 或 `false`                                                                                      |
+| `VERCEL_API_KEY`                      | `null`             | Vercel 的 [access token](/demo/vercel-api-key.png)                                                                                |
+| `OPENAI_API_KEY`                      | `null`             | OpenAI 的 [API key](/demo/openai-api-key.png)                                                                                     |
+| `OPENAI_COMPLETION_INIT_LANG`         | `zh`               | 決定初始語言，可設置為 `zh` 或 `en`                                                                                               |
+| `OPENAI_COMPLETION_MODEL`             | `text-davinci-003` | 參見 [model](https://beta.openai.com/docs/api-reference/completions/create#completions/create-model) 說明                         |
+| `OPENAI_COMPLETION_TEMPERATURE`       | `0.9`              | 參見 [temperature](https://beta.openai.com/docs/api-reference/completions/create#completions/create-temperature) 說明             |
+| `OPENAI_COMPLETION_MAX_TOKENS`        | `240`              | 參見 [max_tokens](https://beta.openai.com/docs/api-reference/completions/create#completions/create-max_tokens) 說明               |
+| `OPENAI_COMPLETION_FREQUENCY_PENALTY` | `0`                | 參見 [frequency_penalty](https://beta.openai.com/docs/api-reference/completions/create#completions/create-frequency_penalty) 說明 |
+| `OPENAI_COMPLETION_PRESENCE_PENALTY`  | `0.6`              | 參見 [presence_penalty](https://beta.openai.com/docs/api-reference/completions/create#completions/create-presence_penalty) 說明   |
+| `LINE_API_KEY`                        | `null`             | LINE 的 [channel access token](/demo/line-api-key.png)                                                                            |
+| `LINE_API_SECRET`                     | `null`             | LINE 的 [channel secret](/demo/line-api-secret.png)                                                                               |
+
+點選「Redeploy」按鈕，以重新部署。
+
+<p align="center">
+  <img src="demo/vercel-redeploy.png" width="300"/>
+</p>
+
+## 除錯
+
+請在 Vercel 平台檢查專案的環境變數是否填寫正確。
+
+<p align="center">
+  <img src="demo/vercel-environments.png" width="300"/>
+</p>
+
+如果有變更，點選「Redeploy」按鈕，以重新部署。
+
+<p align="center">
+  <img src="demo/vercel-redeploy.png" width="300"/>
+</p>
+
+或者，在專案首頁點選「View Function Logs」按鈕。
+
+<p align="center">
+  <img src="demo/vercel-view-logs.png" width="300"/>
+</p>
+
+查看應用程式的錯誤訊息。
+
+<p align="center">
+  <img src="demo/vercel-logs.png" width="300"/>
+</p>
+
+如果還是無法解決，請到「[Issues](https://github.com/memochou1993/gpt-ai-assistant/issues)」頁面，點選「New issue」按鈕，描述你的問題，並附上螢幕截圖。
+
+## 功能建議
+
+請到「[Issues](https://github.com/memochou1993/gpt-ai-assistant/issues)」頁面，點選「New issue」按鈕，描述你的功能建議。
+
+## 開發
+
+下載專案。
+
+```bash
+git clone git@github.com:memochou1993/gpt-ai-assistant.git
+```
+
+進到專案目錄。
+
+```bash
+cd gpt-ai-assistant
+```
+
+安裝依賴套件。
+
+```bash
+npm ci
+```
+
+建立 `.env` 檔。
+
+```bash
+cp .env.example .env
+```
+
+設置環境變數如下：
+
+```env
+APP_ENV=local
+APP_DEBUG=true
+APP_PORT=3000
+
+OPENAI_API_KEY=<your_openai_api_key>
+
+LINE_API_KEY=<your_channel_access_token>
+LINE_API_SECRET=<your_channel_secret>
+```
+
+### 測試
+
+在終端機使用以下指令，運行測試，向 OpenAI 伺服器發送請求。
+
+```bash
+npm run test
+```
+
+查看結果。
+
+```bash
+> gpt-ai-assistant@1.0.0 test
+> jest
+
+  console.info
+    === 000000 ===
+
+    A: 嗨！我可以怎麼幫助你？
+    Q: 嗨？
+    A: 你好！有什麼可以幫助你的嗎？
+
+      at Assistant.info [as debug] (assistant/assistant.js:55:28)
+
+ PASS  assistant/index.test.js
+  ✓ assistant works (1689 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        2.579 s, estimated 4 s
+Ran all test suites.
+```
+
+### 反向代理
+
+修改環境變數如下：
+
+```env
+APP_ENV=production
+```
+
+在終端機使用以下指令，啟動一個 Local 伺服器。
+
+```bash
+npm run dev
+```
+
+在另一個終端機使用以下指令，啟動一個 Proxy 伺服器。
+
+```bash
+ngrok http 3000
+```
+
+回到 Line 平台，修改「Webhook URL」，例如「<https://0000-0000-0000.jp.ngrok.io>」，點選「Update」按鈕。
+
+使用 LINE 手機應用程式發送訊息。
+
+查看結果。
